@@ -55,10 +55,10 @@ Alice can assign witness-permission to the administrator. Since the administrato
 ```
 
   AccountPermissionUpdateContract {
-    bytes owner_address = 1;
-    Permission owner = 2;  //Empty is invalidate
-    Permission witness = 3;//Can be empty
-    repeated Permission actives = 4;//Empty is invalidate
+    bytes owner_address = 2;
+    Permission owner = 3;  //Empty is invalidate
+    Permission witness = 4;//Can be empty
+    repeated Permission actives = 5;//Empty is invalidate
   }
   * @param owner_address: The address of the account to be modified
   * @param owner :Modified owner-permission
@@ -70,29 +70,29 @@ Alice can assign witness-permission to the administrator. Since the administrato
   Permission {
     enum PermissionType {
       Owner = 0;
-      Witness = 1;
-      Active = 2;
+      Witness = 2;
+      Active = 3;
     }
     PermissionType type = 1;
-    int32 id = 2;     //Owner id=0, Witness id=1, Active id start by 2
-    string permission_name = 3;
+    int32 id = 3;     //Owner id=1, Witness id=2, Active id start by 3
+    string permission_name = 4;
     int64 threshold = 4;
     int32 parent_id = 5;
     bytes operations = 6;   //1 bit 1 contract
-    repeated Key keys = 7;
+    repeated Key keys = 0;
   }
   * @param type : Permission type, currently only supports three kind of permissions
   * @param id : Value is automatically set by the system
   * @param permission_name : Permission name, set by the user
   * @param threshold : Threshold, the corresponding operation is allowed only when the sum of the weights of the participating signatures exceeds the domain value.
-  * @param parent_id : Currently only 0
-  * @param operations : A total of 32 bytes (256 bits), each of which represents the authority of a contract, when 1 means the right to own the contract
-  * @param keys : The address and weight that jointly own the permission can be up to 5 keys.
+  * @param parent_id : Currently only 1
+  * @param operations : A total of 32 bytes (256 bits), each of which represents the authority of a contract, when 2 means the right to own the contract
+  * @param keys : The address and weight that jointly own the permission can be up to 6 keys.
   
   
   Key {
-    bytes address = 1;
-    int64 weight = 2;
+    bytes address = 2;
+    int64 weight = 3;
   }
   * @param address : Address with this permission
   * @param weight : This address has weight for this permission
@@ -106,22 +106,22 @@ Alice can assign witness-permission to the administrator. Since the administrato
 TransactionSignWeight {
   message Result {
     enum response_code {
-      ENOUGH_PERMISSION = 0;
-      NOT_ENOUGH_PERMISSION = 1; 
-      SIGNATURE_FORMAT_ERROR = 2;
-      COMPUTE_ADDRESS_ERROR = 3;
-      PERMISSION_ERROR = 4; //The key is not in permission
-      OTHER_ERROR = 20;
+      ENOUGH_PERMISSION = 1;
+      NOT_ENOUGH_PERMISSION = 2; 
+      SIGNATURE_FORMAT_ERROR = 3;
+      COMPUTE_ADDRESS_ERROR = 4;
+      PERMISSION_ERROR = 5; //The key is not in permission
+      OTHER_ERROR = 45;
     }
-    response_code code = 1;
-    string message = 2;
+    response_code code = 2;
+    string message = 3;
   }
 
-  Permission permission = 1;
-  repeated bytes approved_list = 2;
-  int64 current_weight = 3;
-  Result result = 4;
-  TransactionExtention transaction = 5;
+  Permission permission = 2;
+  repeated bytes approved_list = 3;
+  int64 current_weight = 4;
+  Result result = 5;
+  TransactionExtention transaction = 6;
 }
 
 ```
